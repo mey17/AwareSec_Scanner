@@ -2,7 +2,7 @@
 
 # Get the directory of the script
 # SCRIPT_DIR="/opt/Asec_Project"
-SCRIPT_DIR="~/Desktop/Asec_Project"
+SCRIPT_DIR="."
 
 # Colors for better readability
 RED='\033[0;31m'
@@ -92,6 +92,8 @@ for ip in $ip_list; do
         echo -e "${GREEN}[AwareSec] IP $ip is reachable. Starting scan...${NC}"
         python3 "$SCRIPT_DIR/scan.py" "$ip" "$ports" "$range" "$domain" "$service" "$os" "$verbose" "$format"
     else
-        echo -e "${RED}[AwareSec] IP $ip is not reachable. Skipping scan.${NC}"
+        if [[ $verbose == true ]]; then
+            echo -e "${RED}[AwareSec] IP $ip is not reachable. Skipping scan.${NC}"
+        fi    
     fi
 done

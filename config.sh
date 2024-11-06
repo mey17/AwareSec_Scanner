@@ -27,6 +27,7 @@ if [ ! -f ~/.asec_installed ]; then
     install_if_missing scapy.all
     sudo apt-get install -y ipcalc
 
+
     touch ~/.asec_installed
     echo "[AwareSec] All dependencies installed."
 else

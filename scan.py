@@ -1,16 +1,15 @@
-# scan.py
-
 import sys
 import socket
 from scapy.all import *
 from datetime import datetime
-import service_detection  # Import the service detection module
+from service_detection import ServiceDetector
+
 
 def exiting():
     print()
     time = datetime.now()
     current_time = time.strftime('%H:%M:%S')
-    print(f"[AwareSec] Ending process {current_time}")
+    print(f"[AwareSec] Ending process at {current_time}")
     print("-----------------------------------------------------------------------------")
 
 def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=False, output_format='text'):
@@ -35,6 +34,7 @@ def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=F
         ports = range(1, 1025)  # Default port range if none specified
 
     open_ports = []
+    service_detector = ServiceDetector()  # Initialize service detector
 
     # Scan each port in the specified range
     for port in ports:
@@ -43,23 +43,37 @@ def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=F
             result = sock.connect_ex((target, port))
             if result == 0:
                 open_ports.append(port)
-                service_name = service_detection.detect_service(port) if detect_service else "N/A"
-                print(f"[AwareSec] Port {port} is open! Possible Service: {service_name}")
+                if verbose:
+                    print(f"[AwareSec] Port {port} is open!")
                 
-                # Optional banner grabbing
+                # If service detection is enabled, fetch and match service
                 if detect_service:
-                    banner = service_detection.banner_grab(target, port)
-                    print(f"[AwareSec] Banner: {banner}")
+                    banner = fetch_banner(target, port)
+                    service, version, description = service_detector.detect_service(banner, port)
+                    print(f"[AwareSec] Port {port}: Detected service - {service}")
+                    if version:
+                        print(f"[AwareSec] Port {port}: Detected version - {version}")
+                    if description:
+                        print(f"[AwareSec] Port {port}: Service description - {description}")
             elif verbose:
                 print(f"[AwareSec] Port {port} is closed or filtered.")
 
     if detect_os:
-        # Add OS detection logic here
+        # Add logic for OS detection here
         pass
 
     # Print results
     print(f"\nOpen ports for {target}: {open_ports}")
     exiting()
+
+def fetch_banner(ip, port):
+    """Fetch banner for a given port and IP."""
+    try:
+        with socket.create_connection((ip, port), timeout=1) as sock:
+            sock.sendall(b"GET / HTTP/1.1\r\nHost: example.com\r\n\r\n")
+            return sock.recv(1024).decode("utf-8", errors="ignore")
+    except socket.error:
+        return ""
 
 def show_help():
     print("[AwareSec] Usage: scan.py <target(s)> [<ports>] [<range>] [<domain>] [<service>] [<os>] [<verbose>] [<format>]")
