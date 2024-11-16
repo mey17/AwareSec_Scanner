@@ -26,6 +26,7 @@ if [ ! -f ~/.asec_installed ]; then
     install_if_missing sys
     install_if_missing scapy.all
     sudo apt-get install -y ipcalc
+    sudo apt-get install -y jq
 
 
     touch ~/.asec_installed
