@@ -1,7 +1,5 @@
 # service_detection.py
 
-import re
-
 class ServiceDetector:
     def __init__(self, services_file='nmap-services'):
         self.services = self.load_services(services_file)
@@ -10,27 +8,16 @@ class ServiceDetector:
         services = {}
         with open(services_file, 'r') as file:
             for line in file:
-                if line.strip() and not line.startswith('#'):
-                    parts = line.split()
+                if line.startswith('#') or not line.strip():
+                    continue
+                parts = line.split()
+                if len(parts) >= 2:
                     service_name = parts[0]
                     port_protocol = parts[1]
-                    probability = parts[2]
-                    description = " ".join(parts[3:]) if len(parts) > 3 else ""
-
-                    # Parse port and protocol
                     port, protocol = port_protocol.split('/')
-
-                    # Store service entry in dictionary
-                    if port not in services:
-                        services[port] = []
-                    services[port].append({
-                        'service_name': service_name,
-                        'protocol': protocol,
-                        'probability': probability,
-                        'description': description
-                    })
+                    additional_info = " ".join(parts[2:])
+                    services[(int(port), protocol)] = f"{service_name} {port_protocol} {additional_info}"
         return services
 
-    def detect_service(self, port):
-        """Retrieve all service variants for a given port from the loaded nmap-services data."""
-        return self.services.get(str(port), [])
+    def detect_service(self, port, protocol='tcp'):
+        return self.services.get((port, protocol), 'unknown')
