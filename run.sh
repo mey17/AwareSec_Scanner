@@ -13,7 +13,7 @@ show_help() {
     echo ""
     echo -e "${YELLOW}[AwareSec] Options:${NC}"
     echo -e "${YELLOW}[AwareSec]  -h, --help           Show this help message and exit${NC}"
-    echo -e "${YELLOW}[AwareSec]  -p, --ports <ports>  Specify ports to scan (e.g., 22,80,443 or 1-1024, max is 65535)${NC}"
+    echo -e "${YELLOW}[AwareSec]  -p, --ports <ports>  Set ports to scan(e.g.22,80,443 or 1-1024,max 65535)${NC}"
     echo -e "${YELLOW}[AwareSec]  -s, --service        Attempt to detect services running on open ports${NC}"
     echo -e "${YELLOW}[AwareSec]  -o, --os             Attempt to detect the operating system${NC}"
     echo -e "${YELLOW}[AwareSec]  -v, --verbose        Enable verbose output for detailed results${NC}"

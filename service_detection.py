@@ -1,4 +1,3 @@
-# service_detection.py
 
 class ServiceDetector:
     def __init__(self, services_file='nmap-services'):

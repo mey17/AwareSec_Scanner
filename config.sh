@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Define the installation directory
+
 INSTALL_DIR="/opt/asec_project"
 
-# Function to check and install Python packages
+
 install_if_missing() {
     PACKAGE=$1
     python3 -c "import $PACKAGE" &> /dev/null
@@ -18,7 +18,7 @@ install_if_missing() {
     fi
 }
 
-# Ensure pip is installed
+
 if ! command -v pip &> /dev/null; then
     echo "[AwareSec] pip not found. Installing it now..."
     if ! python3 -m ensurepip --upgrade; then
@@ -27,10 +27,10 @@ if ! command -v pip &> /dev/null; then
     fi
 fi
 
-# Install additional Python packages
+
 pip install -r "requirements.txt"
 
-# Clone the project to /opt
+
 if [ ! -d "$INSTALL_DIR" ]; then
     sudo mkdir -p "$INSTALL_DIR"
     sudo cp -r . "$INSTALL_DIR"
@@ -39,12 +39,12 @@ else
     echo "[AwareSec] Project already exists in $INSTALL_DIR"
 fi
 
-# Make sure all scripts are executable
+
 sudo chmod +x "$INSTALL_DIR/asec.sh"
 sudo chmod +x "$INSTALL_DIR/run.sh"
 sudo chmod +x "$INSTALL_DIR/config.sh"
 
-# Create a symbolic link to asec.sh in /usr/local/bin
+
 if [ ! -L /usr/local/bin/asec ]; then
     sudo ln -s "$INSTALL_DIR/asec.sh" /usr/local/bin/asec
     echo "[AwareSec] Created symbolic link /usr/local/bin/asec"

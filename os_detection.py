@@ -2,10 +2,10 @@ import subprocess
 import re
 
 def detect_os(ip):
-    pattern = r"ttl=(\d+)"  # Use a case-insensitive pattern to capture TTL value
+    pattern = r"ttl=(\d+)"  
     try:
         action = subprocess.run(['ping', '-c', '1', ip], capture_output=True, text=True, check=True)
-        result = action.stdout.lower()  # Convert output to lowercase to match the pattern
+        result = action.stdout.lower()  
         match = re.search(pattern, result)
         if match:
             ttl_value = int(match.group(1))
