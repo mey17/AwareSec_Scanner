@@ -1,6 +1,6 @@
 
 class ServiceDetector:
-    def __init__(self, services_file='nmap-services'):
+    def __init__(self, services_file='/opt/asec_project/nmap-services'):
         self.services = self.load_services(services_file)
 
     def load_services(self, services_file):

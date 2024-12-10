@@ -140,7 +140,7 @@ fi
 for ip in $ip_list; do
     if is_reachable "$ip"; then
         echo -e "${GREEN}[AwareSec] IP $ip is reachable. Starting scan...${NC}"
-        python3 "$SCRIPT_DIR/scan.py" "$ip" "$ports" "$service" "$os" "$verbose" "$format" "$save_output_flag" "$timeout"
+        python3 "/opt/asec_project/scan.py" "$ip" "$ports" "$service" "$os" "$verbose" "$format" "$save_output_flag" "$timeout"
     else
         if [[ $verbose == true ]]; then
             echo -e "${RED}[AwareSec] IP $ip is not reachable. Skipping scan.${NC}"
