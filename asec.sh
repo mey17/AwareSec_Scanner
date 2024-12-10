@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the directory of this script (ensures it works wherever the project folder is located)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="/opt/asec_project"
 
 # Run the awaresec.py script with all arguments passed to asec.sh
 python3 "$SCRIPT_DIR/awaresec.py" "$@"
