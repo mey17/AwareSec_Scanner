@@ -53,3 +53,4 @@ fi
 echo "[AwareSec] Installation complete. You can now run the Asec project by calling 'asec' from the terminal."
 echo "[AwareSec] Usage: asec [options] <target>"
 echo "[AwareSec] Or use asec --help to show more information"
+
