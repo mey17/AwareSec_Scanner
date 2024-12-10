@@ -18,6 +18,6 @@ def printTitle():
                                                                                  
                                                                                 """
     print_large_title(title_text)
-    print("https://awaresec.am                  v.1.1                  © Copyright 2024 awaresec.am or one of its authors.")
+    print("https://awaresec.am                  v.1.2                  © Copyright 2024 awaresec.am or one of its authors.")
 
 printTitle()    

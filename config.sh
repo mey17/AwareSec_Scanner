@@ -1,9 +1,8 @@
 #!/bin/bash
 
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Function to check python Packages
+# Function to check and install Python packages
 install_if_missing() {
     PACKAGE=$1
     python3 -c "import $PACKAGE" &> /dev/null
@@ -18,34 +17,39 @@ install_if_missing() {
     fi
 }
 
-# Installing Dependencies
-if [ ! -f ~/.asec_installed ]; then
-    echo "[AwareSec] Checking and installing necessary dependencies..."
+# Install required Python packages
+install_if_missing socket
+install_if_missing time
+install_if_missing json
+install_if_missing csv
+install_if_missing datetime
+install_if_missing os
 
-    install_if_missing socket
-    install_if_missing sys
-    install_if_missing scapy.all
-    sudo apt-get install -y ipcalc
-    sudo apt-get install -y jq
-
-
-    touch ~/.asec_installed
-    echo "[AwareSec] All dependencies installed."
-else
-    echo "[AwareSec] Dependencies already installed."
+# Ensure pip is installed
+if ! command -v pip &> /dev/null; then
+    echo "[AwareSec] pip not found. Installing it now..."
+    if ! python3 -m ensurepip --upgrade; then
+        echo "[AwareSec] Failed to install pip. Please install it manually."
+        exit 1
+    fi
 fi
 
-# Move the entire project to /opt/Asec_Project
-sudo cp -r "$SCRIPT_DIR" /opt
+# Install additional Python packages
+pip install -r "$SCRIPT_DIR/requirements.txt"
 
-# Make scripts executable
-sudo chmod +x /opt/Asec_Project/*.sh
-sudo chmod +x /opt/Asec_Project/*.py
+# Make sure all scripts are executable
+chmod +x "$SCRIPT_DIR/asec.sh"
+chmod +x "$SCRIPT_DIR/run.sh"
+chmod +x "$SCRIPT_DIR/config.sh"
 
-# Create symbolic link to asec in /usr/local/bin
-sudo ln -sf /opt/Asec_Project/asec.sh /usr/local/bin/asec
+# Create a symbolic link to asec.sh in /usr/local/bin
+if [ ! -L /usr/local/bin/asec ]; then
+    sudo ln -s "$SCRIPT_DIR/asec.sh" /usr/local/bin/asec
+    echo "[AwareSec] Created symbolic link /usr/local/bin/asec"
+else
+    echo "[AwareSec] Symbolic link /usr/local/bin/asec already exists"
+fi
 
-# Running the main code
-echo "[AwareSec] Installation complete. You can now run the tool using:"
+echo "[AwareSec] Installation complete. You can now run the Asec project by calling 'asec' from the terminal."
 echo "[AwareSec] Usage: asec [options] <target>"
 echo "[AwareSec] Or use asec --help to show more information"
