@@ -47,17 +47,4 @@ asec [options] <target>
 
 
 
-### Summary:
-- **Project Description**: Provides an overview of the AwareSec project and its features.
-- **Installation Instructions**: Guides the user through cloning the repository and running the configuration script.
-- **Usage Instructions**: Explains how to use the `asec` command with various options and provides examples.
-- **Project Structure**: Describes the main files and their purposes.
-- **License and Acknowledgements**: Includes licensing information and acknowledgements.
-
-With this `README.md`, users will have a clear understanding of how to install, use, and contribute to the AwareSec project.### Summary:
-- **Project Description**: Provides an overview of the AwareSec project and its features.
-- **Installation Instructions**: Guides the user through cloning the repository and running the configuration script.
-- **Usage Instructions**: Explains how to use the `asec` command with various options and provides examples.
-- **Project Structure**: Describes the main files and their purposes.
-- **License and Acknowledgements**: Includes licensing information and acknowledgements.
-
+## Thank u ;)
