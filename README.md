@@ -1,7 +1,7 @@
 # AwareSec Project
 
 AwareSec is a network scanning tool designed to detect open ports, services, and operating systems on target machines. It provides detailed information about the target's network configuration and saves the results in various formats.
-![alt text](https://github.com/mey17/AwareSec_Scanner/img.png)
+
 ## Features
 
 - **Port Scanning**: Scan a range of ports on target machines.
