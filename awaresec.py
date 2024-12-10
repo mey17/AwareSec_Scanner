@@ -28,5 +28,6 @@ def printTitle():
     print("https://awaresec.am".center(terminal_width))
     print("v.1.2".center(terminal_width))
     print("© Copyright 2024 awaresec.am or one of its authors.".center(terminal_width))
+    print()
 
 printTitle()

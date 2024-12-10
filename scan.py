@@ -6,6 +6,7 @@ import csv
 from datetime import datetime
 import os
 from service_detection import ServiceDetector
+from os_detection import detect_os
 
 def exiting():
     time = datetime.now()
@@ -13,7 +14,7 @@ def exiting():
     print(f"[AwareSec] Ending process at {current_time}")
     print("-----------------------------------------------------------------------------")
 
-def save_output(results, detected_services, output_format):
+def save_output(results, detected_services, os_info, output_format):
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
     save_path = "/tmp/asec"
     if not os.path.exists(save_path):
@@ -27,25 +28,29 @@ def save_output(results, detected_services, output_format):
                 if target in detected_services:
                     for port, service in detected_services[target].items():
                         f.write(f"  Port {port} - Detected service: {service}\n")
+                if target in os_info:
+                    f.write(f"  OS Information: {os_info[target]}\n")
     elif output_format == 'csv':
         with open(filename, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(["Target", "Open Ports", "Detected Services"])
+            writer.writerow(["Target", "Open Ports", "Detected Services", "OS Information"])
             for target, open_ports in results.items():
                 services = "; ".join([f"Port {port}: {service}" for port, service in detected_services.get(target, {}).items()])
-                writer.writerow([target, ', '.join(map(str, open_ports)), services])
+                os_info_str = os_info.get(target, "N/A")
+                writer.writerow([target, ', '.join(map(str, open_ports)), services, os_info_str])
     elif output_format == 'json':
         output_data = {}
         for target, open_ports in results.items():
             output_data[target] = {
                 "open_ports": open_ports,
-                "detected_services": detected_services.get(target, {})
+                "detected_services": detected_services.get(target, {}),
+                "os_info": os_info.get(target, "N/A")
             }
         with open(filename, 'w') as f:
             json.dump(output_data, f, indent=4)
     print(f"[AwareSec] Results saved to {filename}")
 
-def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=False, output_format='txt', save_output_flag=False, timeout=1):
+def scan_ip(target, ports=None, detect_service=False, detect_os_flag=False, verbose=False, output_format='txt', save_output_flag=False, timeout=1):
     time_start = datetime.now()
     current_time = time_start.strftime('%H:%M:%S')
     print(f"[AwareSec] Starting scan on {target} at {current_time}")
@@ -59,11 +64,14 @@ def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=F
             ports = range(start, end + 1)
         elif "," in ports:    
             ports = [int(p) for p in ports.split(',')]
+        else:
+            ports = [int(ports)]
     else:
         ports = range(1, 1025)
 
     open_ports = []
     detected_services = {}
+    os_info = {}
     service_detector = ServiceDetector() if detect_service else None
 
     total_ports = len(list(ports))
@@ -99,6 +107,10 @@ def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=F
                 print(f"\n[AwareSec] Error scanning port {port}: {e}")
             continue
 
+    if detect_os_flag:
+        os_info[target] = detect_os(target)
+        print(f"[AwareSec] OS Information for {target}: {os_info[target]}")
+
     print(f"\n[AwareSec] Scan completed. Found {len(open_ports)} open ports")
     print(f"[AwareSec] Open ports: {open_ports}")
     
@@ -106,9 +118,9 @@ def scan_ip(target, ports=None, detect_service=False, detect_os=False, verbose=F
     print(f"[AwareSec] Scan duration: {scan_time}")
     
     if save_output_flag:
-        return open_ports, detected_services
+        return open_ports, detected_services, os_info
     else:
-        return open_ports, {}
+        return open_ports, detected_services, {}
 
 def main():
     if len(sys.argv) < 2:
@@ -126,13 +138,15 @@ def main():
 
     results = {}
     all_detected_services = {}
+    all_os_info = {}
     for target in targets:
-        open_ports, detected_services = scan_ip(target.strip(), ports, service, os_detection, verbose, output_format, save_output_flag, timeout)
+        open_ports, detected_services, os_info = scan_ip(target.strip(), ports, service, os_detection, verbose, output_format, save_output_flag, timeout)
         results[target] = open_ports
         all_detected_services[target] = detected_services
+        all_os_info[target] = os_info
 
     if save_output_flag:
-        save_output(results, all_detected_services, output_format)
+        save_output(results, all_detected_services, all_os_info, output_format)
 
 if __name__ == "__main__":
     main()

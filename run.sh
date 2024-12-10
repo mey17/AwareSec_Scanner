@@ -9,17 +9,17 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 show_help() {
-    echo -e "${GREEN}[AwareSec] Usage: asec [options] <target>${NC}"
+    echo -e "${YELLOW}[AwareSec] Usage: asec [options] <target>${NC}"
     echo ""
-    echo -e "${GREEN}[AwareSec] Options:${NC}"
-    echo -e "${GREEN}[AwareSec]  -h, --help           Show this help message and exit${NC}"
-    echo -e "${GREEN}[AwareSec]  -p, --ports <ports>  Specify ports to scan (e.g., 22,80,443 or 1-1024, max is 65535)${NC}"
-    echo -e "${GREEN}[AwareSec]  -s, --service        Attempt to detect services running on open ports${NC}"
-    echo -e "${GREEN}[AwareSec]  -o, --os             Attempt to detect the operating system${NC}"
-    echo -e "${GREEN}[AwareSec]  -v, --verbose        Enable verbose output for detailed results${NC}"
-    echo -e "${GREEN}[AwareSec]  -t <timeout>         Set socket timeout (1, 2, 3, 4 seconds)${NC}"
-    echo -e "${GREEN}[AwareSec]  -f, --format <type>  Specify output format (txt, json, csv)${NC}"
-    echo -e "${GREEN}[AwareSec]  -save                Save the output to /tmp/asec${NC}"
+    echo -e "${YELLOW}[AwareSec] Options:${NC}"
+    echo -e "${YELLOW}[AwareSec]  -h, --help           Show this help message and exit${NC}"
+    echo -e "${YELLOW}[AwareSec]  -p, --ports <ports>  Specify ports to scan (e.g., 22,80,443 or 1-1024, max is 65535)${NC}"
+    echo -e "${YELLOW}[AwareSec]  -s, --service        Attempt to detect services running on open ports${NC}"
+    echo -e "${YELLOW}[AwareSec]  -o, --os             Attempt to detect the operating system${NC}"
+    echo -e "${YELLOW}[AwareSec]  -v, --verbose        Enable verbose output for detailed results${NC}"
+    echo -e "${YELLOW}[AwareSec]  -t <timeout>         Set socket timeout (1, 2, 3, 4 seconds)${NC}"
+    echo -e "${YELLOW}[AwareSec]  -f, --format <type>  Specify output format (txt, json, csv)${NC}"
+    echo -e "${YELLOW}[AwareSec]  -save                Save the output to /tmp/asec${NC}"
 }
 
 ports=""

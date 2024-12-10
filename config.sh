@@ -28,7 +28,7 @@ if ! command -v pip &> /dev/null; then
 fi
 
 # Install additional Python packages
-pip install -r "$SCRIPT_DIR/requirements.txt"
+pip install -r "requirements.txt"
 
 # Clone the project to /opt
 if [ ! -d "$INSTALL_DIR" ]; then
