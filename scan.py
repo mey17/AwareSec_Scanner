@@ -109,7 +109,7 @@ def scan_ip(target, ports=None, detect_service=False, detect_os_flag=False, verb
 
     if detect_os_flag:
         os_info[target] = detect_os(target)
-        print(f"[AwareSec] OS Information for {target}: {os_info[target]}")
+        print(f"\n[AwareSec] OS Information for {target}: {os_info[target]}")
 
     print(f"\n[AwareSec] Scan completed. Found {len(open_ports)} open ports")
     print(f"[AwareSec] Open ports: {open_ports}")

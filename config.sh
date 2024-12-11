@@ -1,8 +1,24 @@
 #!/bin/bash
 
-
 INSTALL_DIR="/opt/asec_project"
 
+
+if ! command -v python3 &> /dev/null; then
+    echo "[AwareSec] Python3 is not installed. Please install Python3 and try again."
+    exit 1
+fi
+
+
+if command -v sudo &> /dev/null; then
+    SUDO="sudo"
+elif command -v doas &> /dev/null; then
+    SUDO="doas"
+elif command -v su &> /dev/null; then
+    SUDO="su -c"
+else
+    echo "[AwareSec] Neither sudo, doas, nor su is installed. Please install one of these and try again."
+    exit 1
+fi
 
 install_if_missing() {
     PACKAGE=$1
@@ -18,7 +34,6 @@ install_if_missing() {
     fi
 }
 
-
 if ! command -v pip &> /dev/null; then
     echo "[AwareSec] pip not found. Installing it now..."
     if ! python3 -m ensurepip --upgrade; then
@@ -27,26 +42,59 @@ if ! command -v pip &> /dev/null; then
     fi
 fi
 
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$ID
+else
+    echo "[AwareSec] Cannot detect the operating system. Please install necessary packages manually."
+    exit 1
+fi
+
+case $OS in
+    ubuntu|debian|kali)
+        echo "[AwareSec] Detected Debian-based system. Installing necessary packages..."
+        $SUDO apt update
+        $SUDO apt install -y python3 python3-pip
+        ;;
+    arch|manjaro)
+        echo "[AwareSec] Detected Arch-based system. Installing necessary packages..."
+        $SUDO pacman -Sy
+        $SUDO pacman -S --noconfirm python python-pip
+        ;;
+    fedora)
+        echo "[AwareSec] Detected Fedora-based system. Installing necessary packages..."
+        $SUDO dnf install -y python3 python3-pip
+        ;;
+    centos|rhel)
+        echo "[AwareSec] Detected RHEL-based system. Installing necessary packages..."
+        $SUDO yum install -y python3 python3-pip
+        ;;
+    opensuse|suse)
+        echo "[AwareSec] Detected openSUSE-based system. Installing necessary packages..."
+        $SUDO zypper install -y python3 python3-pip
+        ;;
+    *)
+        echo "[AwareSec] Unsupported operating system. Please install necessary packages manually."
+        exit 1
+        ;;
+esac
 
 pip install -r "requirements.txt"
 
-
 if [ ! -d "$INSTALL_DIR" ]; then
-    sudo mkdir -p "$INSTALL_DIR"
-    sudo cp -r . "$INSTALL_DIR"
+    $SUDO mkdir -p "$INSTALL_DIR"
+    $SUDO cp -r . "$INSTALL_DIR"
     echo "[AwareSec] Project cloned to $INSTALL_DIR"
 else
     echo "[AwareSec] Project already exists in $INSTALL_DIR"
 fi
 
-
-sudo chmod +x "$INSTALL_DIR/asec.sh"
-sudo chmod +x "$INSTALL_DIR/run.sh"
-sudo chmod +x "$INSTALL_DIR/config.sh"
-
+$SUDO chmod +x "$INSTALL_DIR/asec.sh"
+$SUDO chmod +x "$INSTALL_DIR/run.sh"
+$SUDO chmod +x "$INSTALL_DIR/config.sh"
 
 if [ ! -L /usr/local/bin/asec ]; then
-    sudo ln -s "$INSTALL_DIR/asec.sh" /usr/local/bin/asec
+    $SUDO ln -s "$INSTALL_DIR/asec.sh" /usr/local/bin/asec
     echo "[AwareSec] Created symbolic link /usr/local/bin/asec"
 else
     echo "[AwareSec] Symbolic link /usr/local/bin/asec already exists"
