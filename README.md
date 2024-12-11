@@ -32,7 +32,7 @@ AwareSec is a network scanning tool designed to detect open ports, services, and
 After installation, you can run the AwareSec project by calling `asec` from the terminal:
 
 ```bash
-asec [options] <target>
+asec <target> [options]
 ```
 
 ## Options
