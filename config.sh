@@ -2,7 +2,6 @@
 
 INSTALL_DIR="/opt/asec_project"
 
-
 if ! command -v python3 &> /dev/null; then
     echo "[AwareSec] Python3 is not installed. Please install Python3 and try again."
     exit 1
@@ -72,6 +71,20 @@ case $OS in
     opensuse|suse)
         echo "[AwareSec] Detected openSUSE-based system. Installing necessary packages..."
         $SUDO zypper install -y python3 python3-pip
+        ;;
+    termux)
+        echo "[AwareSec] Detected Termux environment. Installing necessary packages..."
+        pkg update
+        pkg install -y python
+        ;;
+    alpine)
+        echo "[AwareSec] Detected iSH (Alpine Linux) environment. Installing necessary packages..."
+        apk update
+        apk add python3 py3-pip
+        ;;
+    freebsd)
+        echo "[AwareSec] Detected FreeBSD system. Installing necessary packages..."
+        $SUDO pkg install -y python3 py38-pip
         ;;
     *)
         echo "[AwareSec] Unsupported operating system. Please install necessary packages manually."
