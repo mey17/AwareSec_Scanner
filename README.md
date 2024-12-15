@@ -38,14 +38,14 @@ asec <target> [options]
 ```
 
 ## Options
--h, --help: Show help message and exit.
--p, --ports <ports>: Specify ports to scan (e.g., 22,80,443 or 1-1024, max is 65535).
--s, --service: Attempt to detect services running on open ports.
--o, --os: Attempt to detect the operating system.
--v, --verbose: Enable verbose output for detailed results.
--f, --format <type>: Specify output format (txt, json, csv).
--t <timeout>: Set socket timeout (1, 2, 3, 4 seconds).
--save: Save the output to asec.
+- -h, --help: Show help message and exit.
+- -p, --ports <ports>: Specify ports to scan (e.g., 22,80,443 or 1-1024, max is 65535).
+- -s, --service: Attempt to detect services running on open ports.
+- -o, --os: Attempt to detect the operating system.
+- -v, --verbose: Enable verbose output for detailed results.
+- -f, --format <type>: Specify output format (txt, json, csv).
+- -t <timeout>: Set socket timeout (1, 2, 3, 4 seconds).
+- -save: Save the output to asec.
 
 
 
